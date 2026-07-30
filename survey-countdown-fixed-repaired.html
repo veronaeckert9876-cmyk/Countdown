@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Survey Countdown</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #FFFFFF;
+    font-family: 'Montserrat', Arial, sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.container {
+    width: 95%;
+    text-align: center;
+}
+
+h1 {
+    color: #E23E32;
+    font-size: 4.5rem;
+    font-weight: 800;
+    margin-bottom: 45px;
+}
+
+.timer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.box {
+    background: #D8A027;
+    width: 250px;
+    padding: 35px 20px;
+    border-radius: 28px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+.number {
+    color: #FFFFFF;
+    font-size: 6rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.label {
+    margin-top: 18px;
+    color: #FFFFFF;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.footer {
+    margin-top: 55px;
+    color: #E23E32;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.hidden {
+    display: none;
+}
+
+.thanks {
+    text-align: center;
+}
+
+.thanks h2 {
+    color: #E23E32;
+    font-size: 6rem;
+    font-weight: 800;
+    margin-bottom: 30px;
+}
+
+.divider {
+    width: 200px;
+    height: 10px;
+    background: #D8A027;
+    border-radius: 20px;
+    margin: 0 auto 40px;
+}
+
+.thanks p {
+    color: #333333;
+    font-size: 2.2rem;
+    margin-top: 15px;
+    font-weight: 600;
+}
+
+@media(max-width:1200px){
+
+h1 {
+    font-size: 3rem;
+}
+
+.box {
+    width: 180px;
+}
+
+.number {
+    font-size: 4.5rem;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container" id="container">
+
+<h1>Time Until Survey Closes</h1>
+
+<div class="timer">
+
+<div class="box" id="daysBox">
+<div class="number" id="days">00</div>
+<div class="label">Days</div>
+</div>
+
+<div class="box" id="hoursBox">
+<div class="number" id="hours">00</div>
+<div class="label">Hours</div>
+</div>
+
+<div class="box" id="minutesBox">
+<div class="number" id="minutes">00</div>
+<div class="label">Minutes</div>
+</div>
+
+<div class="box" id="secondsBox">
+<div class="number" id="seconds">00</div>
+<div class="label">Seconds</div>
+</div>
+
+</div>
+
+<div class="footer">
+Survey closes July 31, 2026 at 11:30 PM (Toronto)
+</div>
+
+</div>
+
+
+<script>
+function updateCountdown() {
+    // Target: July 31, 2026 11:30 PM Toronto time.
+    // EDT is UTC-4 during this date.
+    const closingTime = new Date(2026, 6, 31, 23, 30, 0).getTime(); // July is month 6
+
+    const now = Date.now();
+    const distance = closingTime - now;
+
+    if (distance <= 0) {
+        document.body.innerHTML = `
+        <div class="thanks">
+            <h2>Thank You!</h2>
+            <div class="divider"></div>
+            <p>The survey is now closed.</p>
+            <p>We appreciate your feedback.</p>
+        </div>`;
+        return;
+    }
+
+    const days = Math.floor(distance / 86400000);
+    const hours = Math.floor((distance % 86400000) / 3600000);
+    const minutes = Math.floor((distance % 3600000) / 60000);
+    const seconds = Math.floor((distance % 60000) / 1000);
+
+    document.getElementById("days").textContent = String(days).padStart(2,"0");
+    document.getElementById("hours").textContent = String(hours).padStart(2,"0");
+    document.getElementById("minutes").textContent = String(minutes).padStart(2,"0");
+    document.getElementById("seconds").textContent = String(seconds).padStart(2,"0");
+
+    document.getElementById("daysBox").classList.toggle("hidden", days === 0);
+    document.getElementById("hoursBox").classList.toggle("hidden", days === 0 && hours === 0);
+    document.getElementById("minutesBox").classList.toggle("hidden", days === 0 && hours === 0 && minutes === 0);
+}
+
+updateCountdown();
+setInterval(updateCountdown, 1000);
+</script>
+
+</body>
+</html>
